@@ -5,5 +5,6 @@ gemspec
 
 platforms :rbx do
   gem 'rubysl'
+  gem 'rubysl-logger' # for rake
   gem 'racc'
 end
