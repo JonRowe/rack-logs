@@ -2,7 +2,7 @@ require 'fakefs/safe'
 require 'rack/logs/viewer'
 
 describe 'Rack::Logs::Viewer' do
-  let(:config) { instance_double "Rack::Logs::Config", pattern: '*.doge', log_dir: './tmp' }
+  let(:config) { instance_double "Rack::Logs::Config", pattern: '*.doge', log_dir: './tmp', lines: 5 }
 
   describe '#initialize' do
     it 'takes a configuration' do

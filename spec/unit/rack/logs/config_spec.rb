@@ -22,4 +22,14 @@ describe 'Rack::Logs::Config' do
       expect(config.pattern).to eq '*.doge'
     end
   end
+
+  describe '#lines' do
+    it 'defaults to 200' do
+      expect(config.lines).to eq 200
+    end
+    it 'is configurable' do
+      config.lines = 300
+      expect(config.lines).to eq 300
+    end
+  end
 end
