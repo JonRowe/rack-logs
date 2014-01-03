@@ -8,7 +8,7 @@ module Rack
       attr_reader :config
 
       def call env
-        [200, headers, [joined_logs]]
+        [200, headers, joined_logs]
       end
 
     private
@@ -19,10 +19,23 @@ module Rack
         }
       end
 
-      def joined_logs
-        logs.inject("") do |string, (filename, contents)|
-          string + "## " + filename + "\n\n" + contents
+      class JoinedFiles
+        def initialize filenames
+          @filenames = filenames
         end
+
+        def each &block
+          @filenames.each do |filename|
+            block.call "## #{filename}\n\n"
+            ::File.open(filename) do |file|
+              file.each(&block)
+            end
+          end
+        end
+      end
+
+      def joined_logs
+        JoinedFiles.new files
       end
 
       def logs

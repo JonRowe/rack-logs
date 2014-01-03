@@ -31,7 +31,11 @@ describe 'Rack::Logs::Viewer' do
       expect(response[2].respond_to? :each).to be true
     end
     it 'returns the contents of the logs' do
-      expect(response[2]).to eq ["## tmp/my_log.doge\n\nMuch log, such information"]
+      contents = ""
+      response[2].each do |fragment|
+        contents << fragment
+      end
+      expect(contents).to eq "## tmp/my_log.doge\n\nMuch log, such information"
     end
   end
 end
