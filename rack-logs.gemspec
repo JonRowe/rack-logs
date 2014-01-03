@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($/)
   spec.test_files    = spec.files.grep(%r{^(spec)/})
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = '> 1.9'
 
   spec.add_runtime_dependency "rack", "~> 1.5.2"
 
