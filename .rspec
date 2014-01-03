@@ -1,0 +1,4 @@
+--colour
+--order random
+-I ./lib
+-r spec_helper
