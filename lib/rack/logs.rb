@@ -4,6 +4,7 @@ module Rack
   module Logs
     module_function
 
+    autoload 'Viewer', 'rack/logs/viewer'
     autoload 'Config', 'rack/logs/config'
 
     def configure
