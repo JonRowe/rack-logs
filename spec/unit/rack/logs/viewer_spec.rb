@@ -35,7 +35,7 @@ describe 'Rack::Logs::Viewer' do
       response[2].each do |fragment|
         contents << fragment
       end
-      expect(contents).to eq "## tmp/my_log.doge\n\nMuch log, such information"
+      expect(contents).to match %r%## tmp/my_log\.doge\n\n.*Much log, such information%
     end
   end
 end
