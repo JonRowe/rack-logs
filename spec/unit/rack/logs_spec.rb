@@ -27,4 +27,27 @@ describe 'Rack::Logs' do
     end
   end
 
+  describe '.call' do
+    let(:viewer_response) { double }
+    let(:viewer) { instance_double "Rack::Logs::Viewer" }
+    let(:env) { double }
+
+    before do
+      allow(Rack::Logs::Viewer).to receive(:new).and_return(viewer)
+      allow(viewer).to receive(:call).and_return(viewer_response)
+    end
+
+    it 'creates a default Rack::Logs::Config' do
+      expect(Rack::Logs::Config).to receive(:new).once
+      Rack::Logs.call env
+    end
+    it 'creates a Rack::Logs::Viewer' do
+      expect(Rack::Logs::Viewer).to receive(:new).once
+      Rack::Logs.call env
+    end
+    it 'delegates to Rack::Logs::Viewer' do
+      expect(viewer).to receive(:call).with env
+      expect(Rack::Logs.call env).to eq viewer_response
+    end
+  end
 end

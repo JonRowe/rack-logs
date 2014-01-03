@@ -9,7 +9,7 @@ module Rack
     end
 
     def call env
-      [200, {}, []]
+      configure {}.call env
     end
 
   end
