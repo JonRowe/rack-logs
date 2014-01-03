@@ -20,22 +20,34 @@ module Rack
       end
 
       class JoinedFiles
-        def initialize filenames
+        include Enumerable
+
+        def initialize filenames, lines
           @filenames = filenames
+          @lines = lines
         end
 
         def each &block
           @filenames.each do |filename|
             block.call "## #{filename}\n\n"
             ::File.open(filename) do |file|
-              file.each(&block)
+              total = 0
+              file.each_line { total += 1 }
+              progress = 0
+              file.rewind
+              file.each_line do |line|
+                if progress > (total - @lines)
+                  block.call line
+                end
+                progress += 1
+              end
             end
           end
         end
       end
 
       def joined_logs
-        JoinedFiles.new files
+        JoinedFiles.new files, @config.lines
       end
 
       def logs
