@@ -9,11 +9,8 @@ describe 'running `Rack::Logs` via `Rack::Builder`', type: :integration do
 
     before { get '/' }
 
-    example 'returns a 200 response code' do
-      expect(last_response).to be_ok
-    end
-    example 'returns no logs because there are no files' do
-      expect(last_response.body).to eq ''
+    example 'returns a 404 response code because there are no files' do
+      expect(last_response.status).to eq 404
     end
   end
 

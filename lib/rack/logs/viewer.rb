@@ -8,7 +8,12 @@ module Rack
       attr_reader :config
 
       def call env
-        [200, headers, joined_logs]
+        contents = joined_logs(env.fetch('PATH_INFO','/'))
+        if contents.empty?
+          [404, headers, ['No Such File']]
+        else
+          [200, headers, contents]
+        end
       end
 
     private
@@ -25,6 +30,10 @@ module Rack
         def initialize filenames, lines
           @filenames = filenames
           @lines = lines
+        end
+
+        def empty?
+          @filenames.empty?
         end
 
         def each &block
@@ -46,8 +55,8 @@ module Rack
         end
       end
 
-      def joined_logs
-        JoinedFiles.new files, @config.lines
+      def joined_logs path
+        JoinedFiles.new files(path), @config.lines
       end
 
       def logs
@@ -57,8 +66,10 @@ module Rack
         end
       end
 
-      def files
-        Dir[@config.log_dir+'/'+@config.pattern]
+      def files path
+        Dir[@config.log_dir+'/'+@config.pattern].select do |filename|
+          filename =~ Regexp.new( @config.log_dir + path )
+        end
       end
 
     end
