@@ -1,5 +1,9 @@
 require "rack/logs/version"
 
+if RUBY_VERSION.to_f < 2
+  require 'rack/logs/backport'
+end
+
 module Rack
   module Logs
     module_function
