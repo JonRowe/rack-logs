@@ -16,18 +16,16 @@ describe 'running `Rack::Logs` via `Rack::Builder`', type: :integration do
 
   context 'given a log in a configured directory' do
     let(:app) do
+      log_dir = support_path('fixtures/log')
       Rack::Builder.app do
         logs = Rack::Logs.configure do |config|
-          config.log_dir = './tmp'
+          config.log_dir = log_dir
         end
         run logs
       end
     end
 
     before do
-      File.open('./tmp/my_log_file.log','w') do |f|
-        f.write "LOG ENTRY 1234"
-      end
       get '/'
     end
 

@@ -5,21 +5,16 @@ describe 'accessing an individual log', type: :integration do
   include Rack::Test::Methods
 
   let(:app) do
+    log_dir = support_path('fixtures/log')
     Rack::Builder.app do
       logs = Rack::Logs.configure do |config|
-        config.log_dir = './tmp'
+        config.log_dir = log_dir
       end
       run logs
     end
   end
 
   before do
-    File.open('./tmp/my_log_file.log','w') do |f|
-      f.write "LOG ENTRY 1234"
-    end
-    File.open('./tmp/other_file.log','w') do |f|
-      f.write "LOG ENTRY 5678"
-    end
     get '/my_log_file.log'
   end
 
