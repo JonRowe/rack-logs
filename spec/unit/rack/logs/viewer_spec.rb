@@ -1,3 +1,4 @@
+require 'timeout'
 require 'rack/logs/viewer'
 
 describe 'Rack::Logs::Viewer' do
@@ -15,6 +16,14 @@ describe 'Rack::Logs::Viewer' do
   describe '#call env' do
     let(:viewer)   { Rack::Logs::Viewer.new config }
     let(:contents) { response[2].inject("") { |contents, fragment| contents + fragment } }
+
+    around do |example|
+      begin
+        Timeout::timeout(0.01) { example.run }
+      rescue Timeout::Error
+        fail "Performance regression, even large files should be under .01s"
+      end
+    end
 
     shared_examples_for "a rack logs response" do
       it 'returns a rack response' do
