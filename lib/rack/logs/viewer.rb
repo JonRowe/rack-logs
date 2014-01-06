@@ -53,6 +53,25 @@ module Rack
             end
           end
         end
+
+      private
+
+        def tail file, n
+         index = 1
+         lines = 0
+         buffer = ""
+
+         begin
+           file.seek(index * (1024 * -1), :END)
+           chunk = file.read(1024)
+           lines += chunk.count("\n")
+           buffer.prepend chunk
+           index += 1
+         end while lines < n && file.pos >= 0
+
+         buffer.lines[-1 * n].join
+        end
+
       end
 
       def joined_logs path
