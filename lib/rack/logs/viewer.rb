@@ -66,7 +66,7 @@ module Rack
             buffer = file.read
           end
 
-         (buffer.lines.slice (-1 * n), n) || []
+          buffer.lines.pop n
         end
 
       end
