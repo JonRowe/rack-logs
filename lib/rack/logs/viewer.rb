@@ -66,7 +66,7 @@ module Rack
             buffer = file.read
           end
 
-          buffer.lines.pop n
+          buffer.lines.to_a.pop n
         end
 
       end
