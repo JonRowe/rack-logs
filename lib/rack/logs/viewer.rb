@@ -40,15 +40,8 @@ module Rack
           @filenames.each do |filename|
             block.call "## #{filename}\n\n"
             ::File.open(filename) do |file|
-              total = 0
-              file.each_line { total += 1 }
-              progress = 0
-              file.rewind
-              file.each_line do |line|
-                if progress > (total - @lines)
-                  block.call line
-                end
-                progress += 1
+              tail(file, @lines).each do |line|
+                block.call line
               end
             end
           end
@@ -57,19 +50,23 @@ module Rack
       private
 
         def tail file, n
-         index = 1
-         lines = 0
-         buffer = ""
+          index = 1
+          lines = 0
+          buffer = ""
 
-         begin
-           file.seek(index * (1024 * -1), :END)
-           chunk = file.read(1024)
-           lines += chunk.count("\n")
-           buffer.prepend chunk
-           index += 1
-         end while lines < n && file.pos >= 0
+          if file.size > 1024
+            begin
+              file.seek(index * (1024 * -1), IO::SEEK_END)
+              chunk = file.read(1024)
+              lines += chunk.count("\n")
+              buffer.prepend chunk
+              index += 1
+            end while lines < n && file.pos >= 0
+          else
+            buffer = file.read
+          end
 
-         buffer.lines[-1 * n].join
+         (buffer.lines.slice (-1 * n), n) || []
         end
 
       end
