@@ -1,12 +1,15 @@
+# In order to install old Rubies, we need to use old Ubuntu distibution.
+dist: trusty
 language: ruby
 bundler_args: "--standalone --binstubs"
 rvm:
   - 1.9.2
   - 1.9.3
-  - jruby-19mode
-  - rbx-2.2.1
   - 2.0.0
-  - 2.1.0
-matrix:
-  allow_failures:
-    - rvm: rbx-2.2.1
+  - 2.1
+  - 2.2.10
+  - 2.3.8
+  - 2.4.10
+  - 2.5.8
+  - 2.6.6
+  - 2.7.1
