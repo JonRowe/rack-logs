@@ -20,8 +20,17 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "rack", "~> 1.5.2"
 
+  if RUBY_VERSION.to_f < 1.9 || RUBY_VERSION == '1.9.2'
+    spec.add_development_dependency "rake", "~> 10.0.0"
+  elsif RUBY_VERSION.to_f < 2
+    spec.add_development_dependency "rake", "~> 11.0.0"
+  elsif RUBY_VERSION.to_f < 2.3
+    spec.add_development_dependency "rake", "~> 12.3.2"
+  else
+    spec.add_development_dependency "rake", "~> 13.0.0"
+  end
+
   spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rack-test"
   spec.add_development_dependency "rspec",   "~> 3.9.0"
 end
