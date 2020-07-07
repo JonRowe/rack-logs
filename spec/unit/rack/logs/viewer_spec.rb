@@ -26,8 +26,15 @@ describe 'Rack::Logs::Viewer' do
     end
 
     shared_examples_for "a rack logs response" do
+      integer_const =
+        if ENV["RUBY_VERSION"].to_f >= 2.4
+          Integer
+        else
+          Fixnum
+        end
+
       it 'returns a rack response' do
-        expect(response[0]).to be_a Fixnum
+        expect(response[0]).to be_a integer_const
         expect(response[1]).to be_a Hash
         expect(response[1].keys).to include 'Content-Type'
         expect(response[2].respond_to? :each).to be true
