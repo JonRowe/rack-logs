@@ -18,7 +18,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = '> 1.9'
 
-  spec.add_runtime_dependency "rack", "~> 1.6.12"
+  if RUBY_VERSION.to_f < 2.3
+    spec.add_runtime_dependency "rack", "~> 1.6.12"
+  else
+    spec.add_runtime_dependency "rack", "~> 2.2.3"
+  end
 
   if RUBY_VERSION.to_f < 1.9 || RUBY_VERSION == '1.9.2'
     spec.add_development_dependency "rake", "~> 10.0.0"
